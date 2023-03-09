@@ -119,7 +119,7 @@ $shouldBeJSON = $result->getData();
 
 ### The transform() class on the FailedValidation object
 
-The FailedValidation object does not have any data to transform so in this class, so if you call the transform() method on a FailedValidation object, the class just returns self without actually running the callback.
+The FailedValidation object does not have any data to transform, so if you call the transform() method on a FailedValidation object, the class just returns self without actually running the callback.
 
 This was done intentionally so that we can return failed results while still retaining the ability to transform successful results.
 
