@@ -60,6 +60,7 @@ return $validator->rules($rules)->validate($data, function($validatedData) {
 
 If a value is returned from the closure, you can access this value with the getData() method of the ValidationResult returned by this method.
 
+
 ### Validator
 
 Validator is an abstract class that does most of the work of implementing the ValidatorInterface for you. Though it's recommended you use this Validator as a base for your implementation, you are free to just implement the ValidationInterface directly if that fits your use case better.
@@ -70,7 +71,8 @@ This class has one abstract method
     abstract protected function checkData($data, $rules): ValidationResult;
 ```
 
-That performs the validation action in the method of your choice. You must implement yourself. This method returns an object that extends the ValidationResult class described below. 
+That performs the validation action in the method of your choice. You must implement yourself. This method returns an object that extends the ValidationResult class described below.
+
 
 ### ValidationResult
 
@@ -97,6 +99,7 @@ Assuming the object returned by your app extends from ValidationResult, you can 
 If you extend either of these methods in your implementation you can change the value that gets returned. Values returned must extend Passed/FailedValidation respectively.
 
 An example of where you might want to do this is in Laravel, you could implement the Responsible interface to automatically transform these objects in to valid Laravel Response objects. Now you can just return the result directly from your controller method and it will magically transform into a valid http response with proper headers etc.
+
 
 ### Transforming Data Returned By Validator
 
