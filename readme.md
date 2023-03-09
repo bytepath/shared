@@ -60,7 +60,6 @@ return $validator->rules($rules)->validate($data, function($validatedData) {
 
 If a value is returned from the closure, you can access this value with the getData() method of the ValidationResult returned by this method.
 
-
 ### Validator
 
 Validator is an abstract class that does most of the work of implementing the ValidatorInterface for you. Though it's recommended you use this Validator as a base for your implementation, you are free to just implement the ValidationInterface directly if that fits your use case better.
@@ -71,8 +70,7 @@ This class has one abstract method
     abstract protected function checkData($data, $rules): ValidationResult;
 ```
 
-That performs the validation action in the method of your choice. You must implement yourself. This method returns an object that extends the ValidationResult class described below.
-
+That performs the validation action in the method of your choice. You must implement yourself. This method returns an object that extends the ValidationResult class described below. 
 
 ### ValidationResult
 
@@ -89,7 +87,7 @@ As the name suggests, this object will be returned if the provided data fails va
 
 ### Changing The Behaviour Of PassedValidation/FailedValidation In Your Apps
 
-Assuming the object returned by your app extends from ValidationResult, you can return whatever you want from your implementation of Validator. To make this process a bit simpler, the Validator class has two protected methods that you can override to change the class that will be returned in the event of pass/fail
+You can return whatever you want from your implementation of Validator as long as the returned object extends ValidationResult. To make this process a bit simpler, the Validator class has two protected methods that you can override to change the class that will be returned in the event of pass/fail
 
 ```php
     protected function passed($data = []): PassedValidation
@@ -99,7 +97,6 @@ Assuming the object returned by your app extends from ValidationResult, you can 
 If you extend either of these methods in your implementation you can change the value that gets returned. Values returned must extend Passed/FailedValidation respectively.
 
 An example of where you might want to do this is in Laravel, you could implement the Responsible interface to automatically transform these objects in to valid Laravel Response objects. Now you can just return the result directly from your controller method and it will magically transform into a valid http response with proper headers etc.
-
 
 ### Transforming Data Returned By Validator
 
@@ -122,9 +119,9 @@ $shouldBeJSON = $result->getData();
 
 ### The transform() class on the FailedValidation object
 
-The failed validation object does not have any data to transform so in this class, so the transform() on this class just returns self without actually running the
+The FailedValidation object does not have any data to transform so in this class, so if you call the transform() method on a FailedValidation object, the class just returns self without actually running the callback.
 
-callback function provided to this class. This was done intentionally so that we can return failed results while still retaining the ability to transform successful results.
+This was done intentionally so that we can return failed results while still retaining the ability to transform successful results.
 
 ```php
 $failed = $validator->rules($rules)->validate($data, $fn);  // Validation failed here returning a FailedValidation object
