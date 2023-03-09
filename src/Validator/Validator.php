@@ -18,7 +18,7 @@ abstract class Validator implements ValidatorInterface
 {
     /**
      * The list of validation rules that data must satisfy
-     * @var null
+     * @var array
      */
     protected $ruleList = null;
 
@@ -68,7 +68,31 @@ abstract class Validator implements ValidatorInterface
      * Run the provided
      * @return ValidationResult retuns a PassedValidation if OK and a FailedValidation if not OK
      */
-    abstract protected function checkData($data): ValidationResult;
+    abstract protected function checkData($data, $rules): ValidationResult;
+
+    /**
+     * Returns a PassedValidation Object. Extend in your implementation if necessary
+     */
+    protected function passed($data = []): PassedValidation
+    {
+        if($data === null) {
+            $data = [];
+        }
+
+        return new PassedValidation($data);
+    }
+
+    /**
+     * Returns a FailedValidation Object. Extend in your implementation if necessary
+     */
+    protected function failed($errors = []): FailedValidation
+    {
+        if($errors === null) {
+            $errors = [];
+        }
+
+        return new FailedValidation($errors);
+    }
 
     /**
      * Validate the provided data, and if passes, run the provided closure function.
@@ -87,19 +111,19 @@ abstract class Validator implements ValidatorInterface
         $filteredData = $this->filterDataWithoutRules($data, $this->ruleList);
 
         // Validate the provided data
-        $validated = $this->checkData($filteredData);
+        $validated = $this->checkData($filteredData, $this->ruleList);
 
         // If validation failed we can just return now
-        if($validated instanceof FailedValidation) {
+        if(! $validated->passes()) {
             return $validated;
         }
 
         // If a callback to run on validation success has been provided, do that now. The value returned by the closure
         // should be added to the PassedValidation object we are going to return
         if($callback !== null) {
-            return new PassedValidation($callback($filteredData));
+            return $this->passed($callback($filteredData));
         }
 
-        return new PassedValidation();
+        return $this->passed();
     }
 }

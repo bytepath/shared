@@ -105,7 +105,7 @@ class ValidatorTest extends TestCase
 
 class ValidatorTestValidatorPasses extends Validator
 {
-    public function checkData($data): ValidationResult
+    public function checkData($data, $rules): ValidationResult
     {
         return new PassedValidation();
     }
@@ -113,7 +113,7 @@ class ValidatorTestValidatorPasses extends Validator
 
 class ValidatorTestValidatorFails extends Validator
 {
-    public function checkData($data): ValidationResult
+    public function checkData($data, $rules): ValidationResult
     {
         return new FailedValidation();
     }
