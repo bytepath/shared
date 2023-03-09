@@ -176,12 +176,16 @@ class SomeController
     public function __construct(protected SomeService $service)
     {}
 
-    /**
-     * This method uses the service created above to validate and create a user. It then 
-     * transforms the user created in that service into JSON
-    */
     public function createUserReturnJSON($data)
     {
+      /**
+        If validation succeeds,we will create a new user and convert it to JSON
+
+        If validation fails, we return a FailedValidation object that contains
+        a list of validation errors you can provide to the user. You could
+        process these errors here, or catch them in a middleware of some
+        sort
+      */
       return $this->service->createUser($data)->transform(function($data){
           // Transform will only run if validation was successful otherwise the FailedValidation object
           // will be returned with the list of errors that need to be fixed
