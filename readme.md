@@ -187,8 +187,7 @@ class SomeController
         sort
       */
       return $this->service->createUser($data)->transform(function($data){
-          // Transform will only run if validation was successful otherwise the FailedValidation object
-          // will be returned with the list of errors that need to be fixed
+          // This callback will only run if validation was successful
           return json_encode($data);
       });
     }
