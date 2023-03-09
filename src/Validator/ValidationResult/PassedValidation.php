@@ -1,6 +1,7 @@
 <?php
 
 namespace Bytepath\Shared\Validator\ValidationResult;
+use \Closure;
 
 /**
  * A class that holds a list of validation errors.
@@ -25,6 +26,16 @@ class PassedValidation extends ValidationResult
     public function getData(): mixed
     {
         return $this->data;
+    }
+
+    /**
+     * Allows you to transform the data returned by the getData function
+     * @return $this
+     */
+    public function transform(Closure $callback): self
+    {
+        $this->data = $callback($this->data);
+        return $this;
     }
 
     /**

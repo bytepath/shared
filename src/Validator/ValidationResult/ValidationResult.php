@@ -3,6 +3,7 @@
 namespace Bytepath\Shared\Validator\ValidationResult;
 
 use Bytepath\Shared\Validator\Exceptions\ValidationErrorDoesNotExistException;
+use \Closure;
 
 abstract class ValidationResult
 {
@@ -28,6 +29,15 @@ abstract class ValidationResult
     public function getData(): mixed
     {
         return [];
+    }
+
+    /**
+     * Allows you to transform the data returned by this function if successful
+     * @return $this
+     */
+    public function transform(Closure $callback): self
+    {
+        return $this;
     }
 
     /**

@@ -11,6 +11,39 @@ use Bytepath\Shared\Validator\Validator;
 
 class ValidatorTest extends TestCase
 {
+    public function test_ActionResult_transform_function_does_not_run_callback_if_validation_fails()
+    {
+        $failed = $this->getFails()->validate(["cat" => "dog"]);
+
+        $i = 0;
+        $returned = $failed->transform(function () use(&$i) {
+            $i++;
+        });
+
+        $this->assertIsClass(FailedValidation::class, $returned);
+        $this->assertEquals(0, $i);
+    }
+
+    public function test_ActionResult_transform_function_mutates_data_if_validation_passes()
+    {
+        $passed = $this->getPasses()->validate(["cat" => "dog"], function() {
+            return [
+                "hello" => "goodbye",
+            ];
+        });
+
+        $i = 0;
+        $returned = $passed->transform(function ($data) use(&$i) {
+            $i++;
+            return json_encode($data);
+        });
+
+        $this->assertIsClass(PassedValidation::class, $returned);
+        $this->assertEquals(1, $i);
+        $this->assertEquals('{"hello":"goodbye"}', $passed->getData());
+    }
+
+
     public function test_passedValidation_closure_only_receives_values_that_have_corresponding_rules()
     {
         // There should only be keys in $validatedData that have a rule func to evaluate
