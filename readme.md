@@ -100,7 +100,9 @@ An example of where you might want to do this is in Laravel, you could implement
 
 ### Transforming Data Returned By Validator
 
-The ValidationResult object has a method called transform that you can use to mutate the data returned by the ValidationResult object. This class accepts a callback function and returns "self" meaning you can chain this function call directly in your implementation. As an example lets modify the previous example where we validated data and used it to create a user. Imagine instead we want to return a JSON string instead of an object. We could do so using the transform function like this
+The ValidationResult object has a method called transform that you can use to mutate the data returned by the ValidationResult object. This class accepts a callback function and returns "self" meaning you can chain this function call directly in your implementation.
+
+As an example lets modify the previous example where we validated data and used it to create a user. Imagine instead we want to return a JSON string instead of an object. We could do so using the transform function like this
 
 ```php
 // Pulled from the validate() example from earlier in this doc
