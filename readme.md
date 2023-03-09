@@ -18,7 +18,9 @@ ValidatorInterface has two methods
 
 **rules()**
 
-The first method, rules, accepts a list of $rules and returns a new instance of whatever validator you are using. Rules are not currentlyy formally defined. It's up to you to decide what rules are. I use this with laravel, so 'rules' looks like this for me. In the future I plan to add some sort of rule definition class that makes your rules a bit more portable.
+The first method, rules, accepts a list of $rules and returns a new instance of whatever validator you are using. Rules are not currentlyy formally defined. It's up to you to decide what rules are. In the future I plan to add some sort of rule definition class that makes your rules a bit more portable.
+
+I use this with laravel, so 'rules' looks like this for me.
 
 ```php
 $rules = [
@@ -28,8 +30,6 @@ $rules = [
 ```
 
 this method returns a new class, leaving the original intact, so you can call this method at any time without having to worry about state etc.
-
-
 
 **validate()**
 
@@ -49,14 +49,13 @@ $userData = [
   "zip" => "90210" // No rule for this 
 ];
 
-return $validator->rules($rules)->validate($data, function($validatedData) {
+return $validator->rules($rules)->validate($userData, function($validatedData) {
    // zip will be filtered out of the $validatedData array
 
    // Returns a theoretical user object containing the validated data
    return App\Models\User::create($validatedData);
 });
 ```
-
 
 If a value is returned from the closure, you can access this value with the getData() method of the ValidationResult returned by this method.
 
@@ -70,7 +69,9 @@ This class has one abstract method
     abstract protected function checkData($data, $rules): ValidationResult;
 ```
 
-That performs the validation action in the method of your choice. You must implement yourself. This method returns an object that extends the ValidationResult class described below. 
+That performs the validation action in the method of your choice. You must implement this method yourself.
+
+This method returns an object that extends the ValidationResult class described below.
 
 ### ValidationResult
 
@@ -78,12 +79,11 @@ The validate method of the ValidatorInterface returns an object that extends the
 
 **PassedValidation**
 
-As the name suggests, this object will be returned if the provided data passed validation. This object will contain any data that you returned from the closure passed to the validate() method described above in the ValidatorInterface section. To access this data you can run the getData method of the PassedValidation class
+As the name suggests, this object will be returned if the provided data passed validation. This object will contain any data that you returned from the closure passed to the validate() method described above in the ValidatorInterface section. To access this data you can run the getData() method of the PassedValidation class
 
 **FailedValidation**
 
 As the name suggests, this object will be returned if the provided data fails validation. This object will contain a key/val list of rules that did not pass as  well as a human readable string that you can provide to the user in your form. You can access this list of errors with the getErrors() method
-
 
 ### Changing The Behaviour Of PassedValidation/FailedValidation In Your Apps
 
@@ -134,7 +134,6 @@ $failed->transform(function($data) {
    return json_encode($data);   // This function will NOT be ran on FailedValidation so it's safe to assume we have validated data here
 });
 ```
-
 
 ### Example Implementation
 
