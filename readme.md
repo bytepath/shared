@@ -60,6 +60,18 @@ return $validator->rules($rules)->validate($data, function($validatedData) {
 
 If a value is returned from the closure, you can access this value with the getData() method of the ValidationResult returned by this method.
 
+### Validator
+
+Validator is an abstract class that does most of the work of implementing the ValidatorInterface for you. Though it's recommended you use this Validator as a base for your implementation, you are free to just implement the ValidationInterface directly if that fits your use case better.
+
+This class has one abstract method
+
+```php
+    abstract protected function checkData($data, $rules): ValidationResult;
+```
+
+That performs the validation action in the method of your choice. You must implement yourself. This method returns an object that extends the ValidationResult class described below. 
+
 ### ValidationResult
 
 The validate method of the ValidatorInterface returns an object that extends the abstract ValidationResult class. Assuming you are using the premade Validator class in this library, there are two possible objects that can be returned.
@@ -120,18 +132,6 @@ $failed->transform(function($data) {
    return json_encode($data);   // This function will NOT be ran on FailedValidation so it's safe to assume we have validated data here
 });
 ```
-
-### Validator
-
-Validator is an abstract class that does most of the work of implementing the ValidatorInterface for you. This class has one abstract method
-
-```php
-    abstract protected function checkData($data, $rules): ValidationResult;
-```
-
-That performs the validation action in the method of your choice. You must implement yourself.
-
-This method returns an object that extends the ValidationResult class described above.
 
 
 ### Example Implementation
